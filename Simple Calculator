@@ -1,86 +1,72 @@
 import math  
-import tkinter
+import tkinter as tk
+from tkinter import ttk
 
-root = tkinter.Tk()
-root.geometry("1000x500")
+root = tk.Tk()
+root.geometry("400x300")
 root.title("Calculator")
 
-def add_values():
-    n1 = int(num1_entry.get())
-    n2 = int(num2_entry.get())
-    result_label['text'] = f"Result: {n1 + n2}"
+# Load the background image
+bg_image = tk.PhotoImage(file="shelby.png")
+bg_label = tk.Label(root, image=bg_image)
+bg_label.place(x=0, y=0, relwidth=1, relheight=1)  # Set the label size to cover the whole window
 
-def subtract_values():
-    n1 = int(num1_entry.get())
-    n2 = int(num2_entry.get())
-    result_label['text'] = f"Result: {n1 - n2}"
+style = ttk.Style()
+style.configure("TButton",
+                padding=10,
+                relief="flat",
+                font=('Arial', 14, 'bold'),
+                background="Navy")  
 
-def multiply_values():
-    n1 = int(num1_entry.get())
-    n2 = int(num2_entry.get())
-    result_label['text'] = f"Result: {n1 * n2}"
+style.map("TButton",
+          background=[('active', 'blue')])
 
-def divide_values():
-    n1 = int(num1_entry.get())
-    n2 = int(num2_entry.get())
-    result_label['text'] = f"Result: {n1 / n2}"
+def calculate(operation):
+    try:
+        n1 = float(num1_entry.get())
+        n2 = float(num2_entry.get())
+        if operation == "add":
+            result = n1 + n2
+        elif operation == "subtract":
+            result = n1 - n2
+        elif operation == "multiply":
+            result = n1 * n2
+        elif operation == "divide":
+            result = n1 / n2
+        elif operation == "power":
+            result = n1 ** n2
+        elif operation == "percentage":
+            result = (n1 / n2) * 100
+        elif operation == "sin":
+            result = math.sin(math.radians(n1))
+        elif operation == "sqrt":
+            result = math.sqrt(n1)
+        result_label.config(text=f"Result: {result:.2f}")
+    except ValueError:
+        result_label.config(text="Invalid Input")
 
-def sqr_values():
-    n1 = int(num1_entry.get())
-    n2 = int(num2_entry.get())
-    result_label['text'] = f"Result: {n1 ** n2}"
+# Widgets
+num1_label = tk.Label(root, text='Enter First Number:', font=('Helvetica', 12))
+num1_label.pack(pady=10)
 
-def sqrt_value():  
-    n1 = int(num1_entry.get())
-    result_label['text'] = f"Result: {math.sqrt(n1):.2f}" 
-
-def per_values():
-    n1 = int(num1_entry.get())
-    n2 = int(num2_entry.get())
-    result_label['text'] = f"Result: {(n1 / n2) * 100}"
-
-def sine_values():
-    n1 = int(num1_entry.get())
-    n2 = int(num2_entry.get())
-    result_label['text'] = f"Result: {math.sin(n1):.2f}"
-
-num1_label = tkinter.Label(root, text='Enter First Number:')
-num1_label.pack()
-num1_entry = tkinter.Entry(root)
+num1_entry = tk.Entry(root, font=('Helvetica', 12))
 num1_entry.pack()
 
-num2_label = tkinter.Label(root, text='Enter Second Number:')
-num2_label.pack()
-num2_entry = tkinter.Entry(root)
+num2_label = tk.Label(root, text='Enter Second Number:', font=('Helvetica', 12))
+num2_label.pack(pady=10)
+
+num2_entry = tk.Entry(root, font=('Helvetica', 12))
 num2_entry.pack()
 
-add_btn = tkinter.Button(text='Add Values', command=add_values)
-add_btn.pack()
+operations_frame = ttk.Frame(root)
+operations_frame.pack(pady=10)
 
-subtract_btn = tkinter.Button(text='Subtract Values', command=subtract_values)
-subtract_btn.pack()
+operations = ["add", "subtract", "multiply", "divide", "power", "percentage", "sin", "sqrt"]
+for operation in operations:
+    button = ttk.Button(operations_frame, text=operation.capitalize(), command=lambda op=operation: calculate(op))
+    button.grid(row=0, column=operations.index(operation), padx=10)
 
-multiply_btn = tkinter.Button(text='Multiply Values', command=multiply_values)
-multiply_btn.pack()
-
-divide_btn = tkinter.Button(text='Divide Values', command=divide_values)
-divide_btn.pack()
-
-power_btn = tkinter.Button(text='Power Values', command=sqr_values)
-power_btn.pack()
-
-sqrt_btn = tkinter.Button(text='Square Root', command=sqrt_value)
-sqrt_btn.pack()
-
-percentage_btn = tkinter.Button(text='Percentage', command=per_values)
-percentage_btn.pack()
-
-sine_btn = tkinter.Button(text='Sine', command=sine_values)
-sine_btn.pack()
-
-result_label = tkinter.Label(root, text='Result:')
-result_label.pack()
+result_label = tk.Label(root, text='Result:', font=('Helvetica', 14, 'bold'))
+result_label.pack(pady=20)
 
 root.mainloop()
-
-
